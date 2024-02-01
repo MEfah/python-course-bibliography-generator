@@ -77,14 +77,20 @@ def process_input(
     )
 
     models = SourcesReader(path_input).read()
-    formatted_models = tuple(
-        str(item) for item in GOSTCitationFormatter(models).format()
-    )
+    formatted_models = None
 
-    logger.info("Генерация выходного файла ...")
-    Renderer(formatted_models).render(path_output)
+    citationType = CitationEnum(citation)
+    match citationType:
+        case CitationEnum.GOST:
+            formatted_models = tuple(
+                str(item) for item in GOSTCitationFormatter(models).format()
+            )
 
-    logger.info("Команда успешно завершена.")
+    if formatted_models:
+        logger.info("Генерация выходного файла ...")
+        Renderer(formatted_models).render(path_output)
+
+        logger.info("Команда успешно завершена.")
 
 
 if __name__ == "__main__":
