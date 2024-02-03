@@ -2,9 +2,22 @@
 Тестирование функций оформления списка источников по ГОСТ Р 7.0.5-2008.
 """
 
-from formatters.models import BookModel, InternetResourceModel, ArticlesCollectionModel, DissertationModel, JournalArticleModel
+from formatters.models import (
+    BookModel,
+    InternetResourceModel,
+    ArticlesCollectionModel,
+    DissertationModel,
+    JournalArticleModel,
+)
 from formatters.styles.base import BaseCitationStyle
-from formatters.styles.gost import GOSTCitationFormatter, GOSTBook, GOSTInternetResource, GOSTCollectionArticle, GOSTDissertation, GOSTJournalArticle
+from formatters.styles.gost import (
+    GOSTCitationFormatter,
+    GOSTBook,
+    GOSTInternetResource,
+    GOSTCollectionArticle,
+    GOSTDissertation,
+    GOSTJournalArticle,
+)
 
 
 class TestGOST:
@@ -61,9 +74,7 @@ class TestGOST:
             == "Иванов И.М., Петров С.Н. Наука как искусство // Сборник научных трудов. – СПб.: АСТ, 2020. – С. 25-30."
         )
 
-    def test_dissertation(
-        self, dissertation_model_fixture: DissertationModel
-    ) -> None:
+    def test_dissertation(self, dissertation_model_fixture: DissertationModel) -> None:
         """
         Тестирование форматирования диссертаций.
 
@@ -101,7 +112,7 @@ class TestGOST:
         internet_resource_model_fixture: InternetResourceModel,
         articles_collection_model_fixture: ArticlesCollectionModel,
         dissertation_model_fixture: DissertationModel,
-        journal_article_model_fixture: JournalArticleModel
+        journal_article_model_fixture: JournalArticleModel,
     ) -> None:
         """
         Тестирование функции итогового форматирования списка источников.
@@ -119,14 +130,14 @@ class TestGOST:
             internet_resource_model_fixture,
             articles_collection_model_fixture,
             dissertation_model_fixture,
-            journal_article_model_fixture
+            journal_article_model_fixture,
         ]
         formatted_models: list[BaseCitationStyle] = [
             GOSTBook(book_model_fixture),
             GOSTInternetResource(internet_resource_model_fixture),
             GOSTCollectionArticle(articles_collection_model_fixture),
             GOSTDissertation(dissertation_model_fixture),
-            GOSTJournalArticle(journal_article_model_fixture)
+            GOSTJournalArticle(journal_article_model_fixture),
         ]
         result = GOSTCitationFormatter(models).format()
 
@@ -142,4 +153,3 @@ class TestGOST:
         assert str(result[2]) == str(formatted_models[0])
         assert str(result[3]) == str(formatted_models[4])
         assert str(result[4]) == str(formatted_models[1])
-

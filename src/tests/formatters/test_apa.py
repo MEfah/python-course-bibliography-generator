@@ -47,7 +47,7 @@ class TestAPA:
     def test_citation_formatter(
         self,
         book_model_fixture: BookModel,
-        journal_article_model_fixture: JournalArticleModel
+        journal_article_model_fixture: JournalArticleModel,
     ) -> None:
         """
         Тестирование функции итогового форматирования списка источников.
@@ -57,17 +57,13 @@ class TestAPA:
         :return:
         """
 
-        models = [
-            book_model_fixture,
-            journal_article_model_fixture
-        ]
+        models = [book_model_fixture, journal_article_model_fixture]
         formatted_models: list[BaseCitationStyle] = [
             APABook(book_model_fixture),
-            APAJournalArticle(journal_article_model_fixture)
+            APAJournalArticle(journal_article_model_fixture),
         ]
         result = APACitationFormatter(models).format()
 
         # тестирование сортировки списка источников
         assert str(result[0]) == str(formatted_models[1])
         assert str(result[1]) == str(formatted_models[0])
-

@@ -5,14 +5,20 @@ from typing import Any
 
 import pytest
 
-from formatters.models import BookModel, DissertationModel, InternetResourceModel, ArticlesCollectionModel, JournalArticleModel
+from formatters.models import (
+    BookModel,
+    DissertationModel,
+    InternetResourceModel,
+    ArticlesCollectionModel,
+    JournalArticleModel,
+)
 from readers.reader import (
     BookReader,
     SourcesReader,
     InternetResourceReader,
     ArticlesCollectionReader,
     DissertationReader,
-    JournalArticleReader
+    JournalArticleReader,
 )
 from settings import TEMPLATE_FILE_PATH
 
@@ -109,7 +115,7 @@ class TestReaders:
     def test_dissertation(self, workbook: Any) -> None:
         """
         Тестирование чтения диссертаций.
-        
+
         :param workbook: Объект тестовой рабочей книги.
         """
 
@@ -136,7 +142,7 @@ class TestReaders:
     def test_journal_article(self, workbook: Any) -> None:
         """
         Тестирование чтения статей из журналов.
-        
+
         :param workbook: Объект тестовой рабочей книги.
         """
 
@@ -164,7 +170,7 @@ class TestReaders:
         """
 
         models = SourcesReader(TEMPLATE_FILE_PATH).read()
-        # проверка общего считанного количества моделей 
+        # проверка общего считанного количества моделей
         # 4 - книги, 3 - интернет источники, 1 - диссертация, 1 - сборник, 1 - статья
         assert len(models) == 10
 
@@ -175,5 +181,5 @@ class TestReaders:
             InternetResourceModel.__name__,
             ArticlesCollectionModel.__name__,
             DissertationModel.__name__,
-            JournalArticleModel.__name__
+            JournalArticleModel.__name__,
         }
