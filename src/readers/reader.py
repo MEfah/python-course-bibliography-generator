@@ -133,13 +133,12 @@ class JournalArticleReader(BaseReader):
     @property
     def attributes(self) -> dict:
         return {
-            "authorы": {0: str},
+            "authors": {0: str},
             "article_title": {1: str},
             "journal_name": {2: str},
-            "city": {3: str},
-            "year": {4: int},
-            "N": {5: int},
-            "pages": {6: int},
+            "year": {3: int},
+            "N": {4: int},
+            "pages": {5: str},
         }
 
 

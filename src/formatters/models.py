@@ -127,9 +127,8 @@ class JournalArticleModel(BaseModel):
     """
 
     authors: str
-    article_name: str
+    article_title: str
     journal_name: str
-    city: str
     year: int = Field(..., gt=0)
     N: int = Field(..., gt=0)
     pages: str
