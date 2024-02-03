@@ -3,9 +3,13 @@
 """
 from string import Template
 
-from pydantic import BaseModel
-
-from formatters.models import BookModel, InternetResourceModel, ArticlesCollectionModel, DissertationModel, JournalArticleModel
+from formatters.models import (
+    BookModel,
+    InternetResourceModel,
+    ArticlesCollectionModel,
+    DissertationModel,
+    JournalArticleModel,
+)
 from formatters.styles.base import BaseCitationStyle
 from formatters.base import BaseCitationFormatter
 from logger import get_logger
@@ -29,7 +33,9 @@ class GOSTBook(BaseCitationStyle):
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование книги "%s" в соответствии с ГОСТ ...', self.data.title)
+        logger.info(
+            'Форматирование книги "%s" в соответствии с ГОСТ ...', self.data.title
+        )
 
         return self.template.substitute(
             authors=self.data.authors,
@@ -66,7 +72,10 @@ class GOSTInternetResource(BaseCitationStyle):
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование интернет-ресурса "%s" в соответствии с ГОСТ ...', self.data.article)
+        logger.info(
+            'Форматирование интернет-ресурса "%s" в соответствии с ГОСТ ...',
+            self.data.article,
+        )
 
         return self.template.substitute(
             article=self.data.article,
@@ -91,7 +100,10 @@ class GOSTCollectionArticle(BaseCitationStyle):
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование сборника статей "%s" в соответствии с ГОСТ ...', self.data.article_title)
+        logger.info(
+            'Форматирование сборника статей "%s" в соответствии с ГОСТ ...',
+            self.data.article_title,
+        )
 
         return self.template.substitute(
             authors=self.data.authors,
@@ -102,7 +114,7 @@ class GOSTCollectionArticle(BaseCitationStyle):
             year=self.data.year,
             pages=self.data.pages,
         )
-    
+
 
 class GOSTDissertation(BaseCitationStyle):
     """
@@ -119,7 +131,10 @@ class GOSTDissertation(BaseCitationStyle):
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование диссертации "%s" в соответствии с ГОСТ ...', self.data.dissertation_title)
+        logger.info(
+            'Форматирование диссертации "%s" в соответствии с ГОСТ ...',
+            self.data.dissertation_title,
+        )
 
         return self.template.substitute(
             author=self.data.author,
@@ -129,9 +144,9 @@ class GOSTDissertation(BaseCitationStyle):
             code=self.data.code,
             city=self.data.city,
             year=self.data.year,
-            pages=self.data.pages
+            pages=self.data.pages,
         )
-    
+
 
 class GOSTJournalArticle(BaseCitationStyle):
     """
@@ -148,7 +163,11 @@ class GOSTJournalArticle(BaseCitationStyle):
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование статьи "%s" из журнала "%s" в соответствии с ГОСТ ...', self.data.article_title, self.data.journal_name)
+        logger.info(
+            'Форматирование статьи "%s" из журнала "%s" в соответствии с ГОСТ ...',
+            self.data.article_title,
+            self.data.journal_name,
+        )
 
         return self.template.substitute(
             authors=self.data.authors,
@@ -156,9 +175,8 @@ class GOSTJournalArticle(BaseCitationStyle):
             journal_name=self.data.journal_name,
             year=self.data.year,
             N=self.data.N,
-            pages=self.data.pages
+            pages=self.data.pages,
         )
-
 
 
 class GOSTCitationFormatter(BaseCitationFormatter):
@@ -167,14 +185,11 @@ class GOSTCitationFormatter(BaseCitationFormatter):
     """
 
     @property
-    def formatters_map(self):
+    def formatters_map(self) -> dict[str, BaseCitationStyle]:
         return {
             BookModel.__name__: GOSTBook,
             InternetResourceModel.__name__: GOSTInternetResource,
             ArticlesCollectionModel.__name__: GOSTCollectionArticle,
             DissertationModel.__name__: GOSTDissertation,
-            JournalArticleModel.__name__: GOSTJournalArticle
+            JournalArticleModel.__name__: GOSTJournalArticle,
         }
-
-    
-

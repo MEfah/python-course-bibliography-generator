@@ -3,10 +3,12 @@
 """
 from string import Template
 
-from pydantic import BaseModel
 from formatters.base import BaseCitationFormatter
 
-from formatters.models import BookModel, InternetResourceModel, ArticlesCollectionModel, DissertationModel, JournalArticleModel
+from formatters.models import (
+    BookModel,
+    JournalArticleModel,
+)
 from formatters.styles.base import BaseCitationStyle
 from logger import get_logger
 
@@ -23,13 +25,13 @@ class APABook(BaseCitationStyle):
 
     @property
     def template(self) -> Template:
-        return Template(
-            "$authors ($year). $title. $publishing_house"
-        )
+        return Template("$authors ($year). $title. $publishing_house")
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование книги "%s" в соответствии с APA ...', self.data.title)
+        logger.info(
+            'Форматирование книги "%s" в соответствии с APA ...', self.data.title
+        )
 
         return self.template.substitute(
             authors=self.data.authors,
@@ -38,7 +40,6 @@ class APABook(BaseCitationStyle):
             year=self.data.year,
         )
 
-    
 
 class APAJournalArticle(BaseCitationStyle):
     """
@@ -49,13 +50,15 @@ class APAJournalArticle(BaseCitationStyle):
 
     @property
     def template(self) -> Template:
-        return Template(
-            "$authors ($year). $article_title. $journal_name, $N, $pages"
-        )
+        return Template("$authors ($year). $article_title. $journal_name, $N, $pages")
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование статьи "%s" из журнала "%s" в соответствии с APA ...', self.data.article_title, self.data.journal_name)
+        logger.info(
+            'Форматирование статьи "%s" из журнала "%s" в соответствии с APA ...',
+            self.data.article_title,
+            self.data.journal_name,
+        )
 
         return self.template.substitute(
             authors=self.data.authors,
@@ -63,9 +66,8 @@ class APAJournalArticle(BaseCitationStyle):
             journal_name=self.data.journal_name,
             year=self.data.year,
             N=self.data.N,
-            pages=self.data.pages
+            pages=self.data.pages,
         )
-
 
 
 class APACitationFormatter(BaseCitationFormatter):
@@ -74,8 +76,8 @@ class APACitationFormatter(BaseCitationFormatter):
     """
 
     @property
-    def formatters_map(self):
+    def formatters_map(self) -> dict[str, BaseCitationStyle]:
         return {
             BookModel.__name__: APABook,
-            JournalArticleModel.__name__: APAJournalArticle
+            JournalArticleModel.__name__: APAJournalArticle,
         }

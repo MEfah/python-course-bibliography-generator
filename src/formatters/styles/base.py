@@ -35,7 +35,7 @@ class BaseCitationStyle(ABC):
         """
 
     def __str__(self) -> str:
-        return self.formatted
+        return self.formatted.strip()
 
     def __repr__(self) -> str:
-        return self.formatted
+        return self.formatted.strip()

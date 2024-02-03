@@ -34,7 +34,7 @@ class BaseCitationFormatter:
         formatted_items = []
         for model in models:
             style = self.formatters_map.get(type(model).__name__)
-            if style: # Если имеется стиль для модели
+            if style:  # Если имеется стиль для модели
                 formatted_items.append(style(model))  # type: ignore
 
         self.formatted_items = formatted_items

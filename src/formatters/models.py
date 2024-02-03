@@ -84,7 +84,7 @@ class DissertationModel(BaseModel):
 
     """
     Модель диссертации:
-    
+
     .. code-block::
 
         DissertationModel(
@@ -132,4 +132,3 @@ class JournalArticleModel(BaseModel):
     year: int = Field(..., gt=0)
     N: int = Field(..., gt=0)
     pages: str
-    
