@@ -3,10 +3,15 @@
 """
 from string import Template
 
-from pydantic import BaseModel
-
-from formatters.models import BookModel, InternetResourceModel, ArticlesCollectionModel
+from formatters.models import (
+    BookModel,
+    InternetResourceModel,
+    ArticlesCollectionModel,
+    DissertationModel,
+    JournalArticleModel,
+)
 from formatters.styles.base import BaseCitationStyle
+from formatters.base import BaseCitationFormatter
 from logger import get_logger
 
 
@@ -15,7 +20,7 @@ logger = get_logger(__name__)
 
 class GOSTBook(BaseCitationStyle):
     """
-    Форматирование для книг.
+    Форматирование для книг в соответствии с ГОСТ.
     """
 
     data: BookModel
@@ -28,7 +33,9 @@ class GOSTBook(BaseCitationStyle):
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование книги "%s" ...', self.data.title)
+        logger.info(
+            'Форматирование книги "%s" в соответствии с ГОСТ ...', self.data.title
+        )
 
         return self.template.substitute(
             authors=self.data.authors,
@@ -52,7 +59,7 @@ class GOSTBook(BaseCitationStyle):
 
 class GOSTInternetResource(BaseCitationStyle):
     """
-    Форматирование для интернет-ресурсов.
+    Форматирование для интернет-ресурсов в соответствии с ГОСТ.
     """
 
     data: InternetResourceModel
@@ -65,7 +72,10 @@ class GOSTInternetResource(BaseCitationStyle):
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование интернет-ресурса "%s" ...', self.data.article)
+        logger.info(
+            'Форматирование интернет-ресурса "%s" в соответствии с ГОСТ ...',
+            self.data.article,
+        )
 
         return self.template.substitute(
             article=self.data.article,
@@ -77,7 +87,7 @@ class GOSTInternetResource(BaseCitationStyle):
 
 class GOSTCollectionArticle(BaseCitationStyle):
     """
-    Форматирование для статьи из сборника.
+    Форматирование для статьи из сборника в соответствии с ГОСТ.
     """
 
     data: ArticlesCollectionModel
@@ -90,7 +100,10 @@ class GOSTCollectionArticle(BaseCitationStyle):
 
     def substitute(self) -> str:
 
-        logger.info('Форматирование сборника статей "%s" ...', self.data.article_title)
+        logger.info(
+            'Форматирование сборника статей "%s" в соответствии с ГОСТ ...',
+            self.data.article_title,
+        )
 
         return self.template.substitute(
             authors=self.data.authors,
@@ -103,35 +116,80 @@ class GOSTCollectionArticle(BaseCitationStyle):
         )
 
 
-class GOSTCitationFormatter:
+class GOSTDissertation(BaseCitationStyle):
     """
-    Базовый класс для итогового форматирования списка источников.
+    Форматирование для диссертации в соответствии с ГОСТ.
     """
 
-    formatters_map = {
-        BookModel.__name__: GOSTBook,
-        InternetResourceModel.__name__: GOSTInternetResource,
-        ArticlesCollectionModel.__name__: GOSTCollectionArticle,
-    }
+    data: DissertationModel
 
-    def __init__(self, models: list[BaseModel]) -> None:
-        """
-        Конструктор.
+    @property
+    def template(self) -> Template:
+        return Template(
+            "$author $dissertation_title: дис. ... $degree $field наук.: $code. - $city, $year. - с. $pages"
+        )
 
-        :param models: Список объектов для форматирования
-        """
+    def substitute(self) -> str:
 
-        formatted_items = []
-        for model in models:
-            formatted_items.append(self.formatters_map.get(type(model).__name__)(model))  # type: ignore
+        logger.info(
+            'Форматирование диссертации "%s" в соответствии с ГОСТ ...',
+            self.data.dissertation_title,
+        )
 
-        self.formatted_items = formatted_items
+        return self.template.substitute(
+            author=self.data.author,
+            dissertation_title=self.data.dissertation_title,
+            degree=self.data.degree,
+            field=self.data.field,
+            code=self.data.code,
+            city=self.data.city,
+            year=self.data.year,
+            pages=self.data.pages,
+        )
 
-    def format(self) -> list[BaseCitationStyle]:
-        """
-        Форматирование списка источников.
 
-        :return:
-        """
+class GOSTJournalArticle(BaseCitationStyle):
+    """
+    Форматирование для статьи из журнала в соответствии с ГОСТ.
+    """
 
-        return sorted(self.formatted_items, key=lambda item: item.formatted)
+    data: JournalArticleModel
+
+    @property
+    def template(self) -> Template:
+        return Template(
+            "$article_title / $authors // $journal_name. -  $year. - N $N. - С. $pages"
+        )
+
+    def substitute(self) -> str:
+
+        logger.info(
+            'Форматирование статьи "%s" из журнала "%s" в соответствии с ГОСТ ...',
+            self.data.article_title,
+            self.data.journal_name,
+        )
+
+        return self.template.substitute(
+            authors=self.data.authors,
+            article_title=self.data.article_title,
+            journal_name=self.data.journal_name,
+            year=self.data.year,
+            N=self.data.N,
+            pages=self.data.pages,
+        )
+
+
+class GOSTCitationFormatter(BaseCitationFormatter):
+    """
+    Итоговый класс для форматирования списков в соответствии с ГОСТ.
+    """
+
+    @property
+    def formatters_map(self) -> dict[str, BaseCitationStyle]:
+        return {
+            BookModel.__name__: GOSTBook,
+            InternetResourceModel.__name__: GOSTInternetResource,
+            ArticlesCollectionModel.__name__: GOSTCollectionArticle,
+            DissertationModel.__name__: GOSTDissertation,
+            JournalArticleModel.__name__: GOSTJournalArticle,
+        }

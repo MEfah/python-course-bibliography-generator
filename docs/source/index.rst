@@ -7,6 +7,7 @@
 
 Поддерживаемые стили цитирования:
     - ГОСТ Р 7.0.5-2008
+    - APA 7
 
 Установка
 =========
@@ -148,13 +149,22 @@
 .. automodule:: readers.reader
    :members:
 
-Генерация выходного файла
-=========================
-.. automodule:: renderer
-   :members:
-
 Модели объектов
 ===============
 
 .. automodule:: formatters.models
     :members:
+
+Стили библиографических списков
+===============================
+
+.. automodule:: formatters.styles.gost
+    :members:
+
+.. automodule:: formatters.styles.apa
+    :members:
+
+Генерация выходного файла
+=========================
+.. automodule:: renderer
+   :members:
