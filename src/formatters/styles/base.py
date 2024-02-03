@@ -23,7 +23,7 @@ class BaseCitationStyle(ABC):
         """
         Получение шаблона для форматирования строки.
 
-        :return:
+        :return: Строка, поддерживающая подстановки через $
         """
 
     @abstractmethod
@@ -31,7 +31,7 @@ class BaseCitationStyle(ABC):
         """
         Заполнение шаблона для форматирования строки.
 
-        :return:
+        :return: Строка с подстановленными в шаблон значениями
         """
 
     def __str__(self) -> str:
