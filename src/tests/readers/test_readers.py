@@ -133,7 +133,7 @@ class TestReaders:
         # проверка общего количества атрибутов
         assert len(model_type.schema().get("properties", {}).keys()) == 8
 
-    def test_dissertation(self, workbook: Any) -> None:
+    def test_journal_article(self, workbook: Any) -> None:
         """
         Тестирование чтения статей из журналов.
         
